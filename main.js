@@ -18,9 +18,20 @@ client.on('qr', qr => {
     qrcode.generate(qr, {small: true});
 });
 
+function checkPhrase(inputMessage, DesiredMessage) {
+    
+    const normalizedMessage = inputMessage.toLowerCase();
+    const normalizedDesiredMessage = DesiredMessage.toLowerCase();
+
+    const stringArray = normalizedMessage.split(" ");
+
+    return stringArray.includes(normalizedDesiredMessage);
+
+  }
+
 
 client.on('message', async (msg) => {
-    if (msg.body === '!send-media') {
+    if (checkPhrase(msg.body,'!send-media')) {
         const media = MessageMedia.fromFilePath('./images/esqueletosDoCoitoAsOito.jpg');
         await client.sendMessage(msg.from, media);
     }
@@ -28,7 +39,7 @@ client.on('message', async (msg) => {
 
 client.on('message', async (msg) => {
 
-    if (msg.body === '!viado') {
+    if (checkPhrase(msg.body,'!viado')) {
         try {
             // Mensagem veio de um grupo.
             if (msg.from.includes('@g.us')) { 
@@ -56,7 +67,7 @@ client.on('message', async (msg) => {
 
 client.on('message', async (msg) => {
 
-    if (msg.body === '!viadodogrupo') {
+    if (checkPhrase(msg.body,'!viadodogrupo')) {
         try {
             // Mensagem veio de um grupo.
             if (msg.from.includes('@g.us')) { 
@@ -82,7 +93,7 @@ client.on('message', async (msg) => {
 
 
 client.on('message', async (msg) => {
-    if (msg.body === '!gatinho') {
+    if (checkPhrase(msg.body,'!gatinho')) {
         try {
             const dir = './images/gatinhos/';
             const files = fs.readdirSync(dir);
