@@ -2,8 +2,6 @@ const { Client,MessageMedia,LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 
-const idLeila = '558194038470@c.us';
-
 const client = new Client({
     puppeteer: {
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -68,20 +66,6 @@ client.on('message', async (msg) => {
             console.log('Erro método !gatinho:', error);
         }
     }
-});
-
-
-client.on('ready', () => {
-    setInterval(async () => {
-        const now = new Date();
-        const targetHour = 20;
-
-        if (now.getHours() === targetHour && now.getMinutes() === 0) {
-            const media = MessageMedia.fromFilePath('./images/esqueletosDoCoitoAsOito.jpg');
-            await client.sendMessage(idLeila, media);
-            console.log('Mídia enviada!');
-        }
-    }, 60000);
 });
 
 client.initialize();
