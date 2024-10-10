@@ -1,4 +1,4 @@
-const { Client,MessageMedia,LocalAuth } = require('whatsapp-web.js');
+const { Client,MessageMedia,LocalAuth,GroupChat } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 
@@ -53,6 +53,33 @@ client.on('message', async (msg) => {
         }
     }
 });
+
+client.on('message', async (msg) => {
+
+    if (msg.body === '!viadodogrupo') {
+        try {
+            // Mensagem veio de um grupo.
+            if (msg.from.includes('@g.us')) { 
+                groupId = await client.getChatById(msg.from);
+
+                const randomParticipant = Math.floor(Math.random() * groupId.groupMetadata.participants.length);
+                const participantId = groupId.groupMetadata.participants[randomParticipant].id;
+                const profilePicUrl = await client.getProfilePicUrl(participantId._serialized);
+                if (profilePicUrl) {
+                    const media = await MessageMedia.fromUrl(profilePicUrl);
+                    await client.sendMessage(msg.from, media, {caption: `O viado do grupo é: @${participantId.user}`, mentions: [participantId._serialized]});
+                }
+            } else {
+                await client.sendMessage(msg.from, "Não tá num grupo, animal!");
+                
+            }
+
+        } catch (error) {
+            console.log('Erro método !viadodogrupo:', error);
+        }
+    }
+});
+
 
 client.on('message', async (msg) => {
     if (msg.body === '!gatinho') {
